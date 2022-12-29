@@ -15,78 +15,9 @@ import time
 import ast
 import datetime as dt
 
-# from  StartUp import *
-
-
-# sys.argv = ['ParcelGen2ParcelMkt',
-#             'test',
-#             'input',
-#             'output',
-#             'Params_ParcelGen.txt' ,
-#             'ParcelDemand_Test.csv' ,
-#             'skimTijd_new_REF.mtx' ,
-#             'skimAfstand_new_REF.mtx' ,
-#             'Zones_v4.shp' ,
-#            'SEGS2020.csv',
-#             'parcelNodes_v2.shp'
-
-#     ]
-
-#%% Here I use the pure generation of
 cwd = os.getcwd().replace(os.sep, '/')
 datapath = cwd.replace('Code', '')
 varDict = {}
-
-# locationparam = f'{datapath}'+'/' + sys.argv[2] +'/' + sys.argv[4]
-# # print( f'{datapath}'+'/' + sys.argv[2] +'/' + sys.argv[4])
-
-# params_file = open(locationparam)
-
-# varDict['LABEL'	]			= sys.argv[1]
-# varDict['DATAPATH']			= datapath
-# varDict['INPUTFOLDER']		= f'{datapath}'+'/'+ sys.argv[2] +'/'
-# varDict['OUTPUTFOLDER']		= f'{datapath}'+'/'+ sys.argv[3] +'/'
-
-# varDict['PARCELS'] 		= varDict['INPUTFOLDER'] + sys.argv[5] #'skimTijd_new_REF.mtx'
-
-# varDict['SKIMTIME'] 		= varDict['INPUTFOLDER'] + sys.argv[6] #'skimTijd_new_REF.mtx'
-# varDict['SKIMDISTANCE']		= varDict['INPUTFOLDER'] + sys.argv[7] #'skimAfstand_new_REF.mtx'
-# varDict['ZONES']			= varDict['INPUTFOLDER'] + sys.argv[8] #'Zones_v4.shp'
-# varDict['SEGS']				= varDict['INPUTFOLDER'] + sys.argv[9] #'SEGS2020.csv'
-# varDict['PARCELNODES']		= varDict['INPUTFOLDER'] + sys.argv[10] #'parcelNodes_v2.shp'
-
-# # params_file = open(f'{datapath}/Input/Params_ParcelGen.txt')
-
-
-
-
-
-# for line in params_file:
-#     if len(line.split('=')) > 1:
-#         key, value = line.split('=')
-#         if len(value.split(':')) > 1:
-#             value, dtype = value.split(':')
-#             if len(dtype.split('#')) > 1: dtype, comment = dtype.split('#')
-#             # Allow for spacebars around keys, values and dtypes
-#             while key[0] == ' ' or key[0] == '\t': key = key[1:]
-#             while key[-1] == ' ' or key[-1] == '\t': key = key[0:-1]
-#             while value[0] == ' ' or value[0] == '\t': value = value[1:]
-#             while value[-1] == ' ' or value[-1] == '\t': value = value[0:-1]
-#             while dtype[0] == ' ' or dtype[0] == '\t': dtype = dtype[1:]
-#             while dtype[-1] == ' ' or dtype[-1] == '\t': dtype = dtype[0:-1]
-#             dtype = dtype.replace('\n',"")
-#             # print(key, value, dtype)
-#             if dtype == 'string': varDict[key] = str(value)
-#             elif dtype == 'list': varDict[key] = ast.literal_eval(value)
-#             elif dtype == 'int': varDict[key] = int(value)
-#             elif dtype == 'float': varDict[key] = float(value)
-#             elif dtype == 'bool': varDict[key] = eval(value)
-#             elif dtype == 'variable': varDict[key] = globals()[value]
-#             elif dtype == 'eval': varDict[key] = eval(value)
-
-
-# f"{varDict['OUTPUTFOLDER']}ParcelDemand_{varDict['LABEL']}.csv"
-
 
 if sys.argv[0] == '':
     params_file = open(f'{datapath}/Input/Params_ParcelGen.txt')
@@ -104,9 +35,6 @@ if sys.argv[0] == '':
     varDict['ZONES']			= varDict['INPUTFOLDER'] + 'Zones_v4.shp' #'Zones_v4.shp'
     varDict['SEGS']				= varDict['INPUTFOLDER'] + 'SEGS2020.csv' #'SEGS2020.csv'
     varDict['PARCELNODES']		= varDict['INPUTFOLDER'] + 'parcelNodes_v2.shp'
-
-
-
 
 else:  # This is the part for line cod execution
     locationparam = f'{datapath}'+'/' + sys.argv[2] +'/' + sys.argv[4]
@@ -126,11 +54,6 @@ else:  # This is the part for line cod execution
     varDict['PARCELNODES']		= varDict['INPUTFOLDER'] + sys.argv[10] #'parcelNodes_v2.shp'
     # So it shuts up the warnings (remove when running in spyder)
     pd.options.mode.chained_assignment = None
-
-
-
-
-
 
 for line in params_file:
     if len(line.split('=')) > 1:
@@ -155,20 +78,6 @@ for line in params_file:
             elif dtype == 'bool': varDict[key] = eval(value)
             elif dtype == 'variable': varDict[key] = globals()[value]
             elif dtype == 'eval': varDict[key] = eval(value)
-
-
-
-
-
-
-
-
-
-
-
-
-
-#%% Start
 
 zones = read_shape(varDict['ZONES'])
 zones.index = zones['AREANR']
@@ -318,28 +227,9 @@ Parcels = parcels_hubspoke.append(parcels_hyperconnected)
 # parcels_hyperconnected.to_csv(f"{varDict['OUTPUTFOLDER']}Demand_parcels_hyperconnected{varDict['LABEL']}.csv", index=False)
 # parcels_hubspoke.to_csv(f"{varDict['OUTPUTFOLDER']}Demand_parcels_hubspoke{varDict['LABEL']}.csv", index=False)
 
-Parcels.to_csv(f"{varDict['OUTPUTFOLDER']}Demand_parcels_fulfilment_{varDict['LABEL']}.csv", index=False)
+Parcels.to_csv(f"{varDict['OUTPUTFOLDER']}Demand_parcels_fulfillment.csv", index=False)
 
 print("Connection Generation 2 Market done")
-
-    #%% Recover previous run if not generated the demand
-
-    # if ~ varDict['RUN_DEMAND_MODULE']:
-    #     print("Get parcel demand from previous run...")
-    #     parcels = pd.read_csv(f"{varDict['DATAPATH']}Output/Demand_parcels.csv");    parcels.index = parcels['Parcel_ID']
-    #     parcels_hyperconnected = pd.read_csv(f"{varDict['DATAPATH']}Output/Demand_parcels_hyperconnected.csv"); parcels_hyperconnected.index = parcels_hyperconnected['Parcel_ID']
-    #     parcels_hubspoke = pd.read_csv(f"{varDict['DATAPATH']}Output/Demand_parcels_hubspoke.csv"); parcels_hubspoke.index = parcels_hubspoke['Parcel_ID']
-
-
-    #%%
-"""
-
-The outputs are 2 datasets:
-    1 The parels that go to the ParcelMarket
-    2 For the parcels that go through hub_spoke. The delivery and pick up will be changed outside
-
-
-"""
 
 
 
