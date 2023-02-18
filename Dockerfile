@@ -5,13 +5,14 @@ RUN apt-get update && \
        liblapack-dev libatlas-base-dev && \
    rm -rf /var/lib/apt/lists/*
 
-WORKDIR /srv/parcel-generation
+WORKDIR /srv/gen2mkt
 
-COPY setup.py requirements.txt README.md /srv/parcel-generation/
-COPY src /srv/parcel-generation/src
+COPY setup.py requirements.txt README.md /srv/gen2mkt/
+COPY src /srv/gen2mkt/src
 
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r /srv/parcel-generation/requirements.txt && \
-    pip install --no-cache-dir /srv/parcel-generation/
+    pip install --upgrade setuptools && \
+    pip install --no-cache-dir -r /srv/gen2mkt/requirements.txt && \
+    pip install --no-cache-dir /srv/gen2mkt/
 
-ENTRYPOINT [ "gen2mark", "-vv" ]
+ENTRYPOINT [ "gen2mkt", "-vv" ]

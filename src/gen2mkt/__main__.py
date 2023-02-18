@@ -74,7 +74,7 @@ def main():
     parser = ArgumentParser(description=__doc__,
                             formatter_class=RawDefaultsHelpFormatter)
 
-    parser.add_argument('PARCELDEMAND', type=strfile, help='The path of the parcel demand file (csv)')
+    parser.add_argument('PARCELS', type=strfile, help='The path of the parcel demand file (csv)')
     parser.add_argument('SKIMTIME', type=strfile, help='The path of the time skim matrix (mtx)')
     parser.add_argument('SKIMDISTANCE', type=strfile,
                         help='The path of the distance skim matrix (mtx)')

@@ -18,7 +18,7 @@ long_description = (here / 'README.md').read_text(encoding='utf-8')
 def get_version():
     """Scan __init__ file for __version__ and retrieve."""
 
-    finit = join(here, 'src', 'gen2mark', '__init__.py')
+    finit = join(here, 'src', 'gen2mkt', '__init__.py')
     with open(finit, 'r', encoding="utf-8") as fpnt:
         for line in fpnt:
             if line.startswith('__version__'):
