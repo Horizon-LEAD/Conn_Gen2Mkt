@@ -75,7 +75,7 @@ def parse_env_values(env):
 
     # specific to Parcel Generation
     config_env["PARCELS_PER_HH_C2C"] = config_env["PARCELS_M"] / config_env["PARCELS_DAYS"] \
-        / config_env["PARCELS_M_HHS"]
+        / config_env["PARCELS_M_HHS"] * 0.04
     config_env["PARCELS_PER_HH"] = config_env["PARCELS_PER_HH_C2C"] + \
         config_env['PARCELS_PER_HH_B2C']
 

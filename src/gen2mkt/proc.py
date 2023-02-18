@@ -24,7 +24,8 @@ def run_model(cfg):
     zones = read_shape(cfg['ZONES'])
     zones.index = zones['AREANR']
     nZones = len(zones)
-
+    
+    # To be deleted
     skims = {'time': {}, 'dist': {}, }
     skims['time']['path'] = cfg['SKIMTIME']
     skims['dist']['path'] = cfg['SKIMDISTANCE']
@@ -58,6 +59,7 @@ def run_model(cfg):
     cepList   = np.unique(parcelNodes['CEP'])
     cepNodes = [np.where(parcelNodes['CEP']==str(cep))[0] for cep in cepList]
     
+    # Keep only cepNodeDict and the last for loop
     cepNodeDict = {}; cepZoneDict = {}; cepSkimDict = {}
     for cep in cepList: 
         cepZoneDict[cep] = parcelNodes[parcelNodes['CEP'] == cep]['AREANR'].astype(int).tolist()
@@ -99,6 +101,7 @@ def run_model(cfg):
         
         parcels_hyperconnected = ParceltobeL2L
     else:
+        # Replace if else with the commented out line of code
         if type (Gemeenten[0]) == list:
             Geemente = Gemeenten [0]
         else:
@@ -112,13 +115,13 @@ def run_model(cfg):
         parcels_hyperconnected.loc[parcels_hyperconnected['L2L'] == True,'O_zone'] = np.random.choice(segs_local['zone'], p=(L2L_distribution), size=( parcels_hyperconnected['L2L'].value_counts()[True] )) #assign origin based on local distribution if parcel is L2L
     
     ParcelLockers =  parcels[(parcels['PL']!=0)]  
-    ParcelLockers = ParcelLockers[(parcels['L2L']== False)]
-    ParcelLockers = ParcelLockers [(parcels['CS_eligible']== False )]
+    ParcelLockers = ParcelLockers[(parcels['L2L'] == False)]
+    ParcelLockers = ParcelLockers[(parcels['CS_eligible'] == False )]
     
     parcels_hyperconnected = parcels_hyperconnected.append(ParcelLockers)                                               
     parcels_hubspoke = parcels[~(parcels['L2L'] | parcels['CS_eligible'] | parcels['PL'])]
    
-    parcels_hyperconnected ['Fulfilment']='Hyperconnected'
+    parcels_hyperconnected['Fulfilment']='Hyperconnected'
     parcels_hubspoke['Fulfilment']='Hubspoke'
 
     Parcels = parcels_hubspoke.append(parcels_hyperconnected)
