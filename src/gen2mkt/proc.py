@@ -8,7 +8,7 @@ from logging import getLogger
 import pandas as pd
 import numpy as np
 
-from .utils import read_shape, read_mtx
+from .utils import read_shape
 
 logger = getLogger("gen2mkt.proc")
 
@@ -29,6 +29,7 @@ def run_model(cfg):
     segs.index = segs['zone']
     segs = segs[segs['zone'].isin(zones['AREANR'])] #Take only segs into account for which zonal data is known as well
 
+    # FIXME - is it needed ?
     parcelNodes = read_shape(cfg['PARCELNODES'], returnGeometry=False)
     parcelNodes.index = parcelNodes['id'].astype(int)
     parcelNodes = parcelNodes.sort_index()  
@@ -36,9 +37,6 @@ def run_model(cfg):
     for node in parcelNodes['id']:
         parcelNodes.loc[node,'SKIMNR'] = int(invZoneDict[parcelNodes.at[int(node),'AREANR']])
     parcelNodes['SKIMNR'] = parcelNodes['SKIMNR'].astype(int)
-
-    cepList   = np.unique(parcelNodes['CEP'])
-    cepNodes = [np.where(parcelNodes['CEP']==str(cep))[0] for cep in cepList]
 
     parcels = pd.read_csv(cfg['PARCELS'])
     parcels.index = parcels['Parcel_ID']
