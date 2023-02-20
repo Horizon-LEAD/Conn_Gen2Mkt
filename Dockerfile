@@ -8,11 +8,13 @@ RUN apt-get update && \
 WORKDIR /srv/gen2mkt
 
 COPY setup.py requirements.txt README.md /srv/gen2mkt/
-COPY src /srv/gen2mkt/src
 
 RUN pip install --upgrade pip && \
     pip install --upgrade setuptools && \
-    pip install --no-cache-dir -r /srv/gen2mkt/requirements.txt && \
-    pip install --no-cache-dir /srv/gen2mkt/
+    pip install --no-cache-dir -r /srv/gen2mkt/requirements.txt
 
+COPY src /srv/gen2mkt/src
+RUN pip install --no-cache-dir /srv/gen2mkt/
+
+WORKDIR /
 ENTRYPOINT [ "gen2mkt", "-vv" ]
