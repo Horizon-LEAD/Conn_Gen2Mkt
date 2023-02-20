@@ -1,7 +1,6 @@
 """Processing module
 """
 
-import json
 from os.path import join
 from time import time
 from logging import getLogger
@@ -16,29 +15,11 @@ logger = getLogger("gen2mkt.proc")
 def run_model(cfg):
     start_time = time()
 
-    outdir = cfg['OUTDIR']
-    label  = cfg['LABEL']
-
     logger.info('Importing data...')
 
     zones = read_shape(cfg['ZONES'])
     zones.index = zones['AREANR']
     nZones = len(zones)
-    
-    # To be deleted
-    skims = {'time': {}, 'dist': {}, }
-    skims['time']['path'] = cfg['SKIMTIME']
-    skims['dist']['path'] = cfg['SKIMDISTANCE']
-    for skim in skims:
-        skims[skim] = read_mtx(skims[skim]['path'])
-        nSkimZones = int(len(skims[skim])**0.5)
-        skims[skim] = skims[skim].reshape((nSkimZones, nSkimZones))
-        if skim == 'time': skims[skim][6483] = skims[skim][:,6483] = 5000 # data deficiency
-        for i in range(nSkimZones): #add traveltimes to internal zonal trips
-            skims[skim][i,i] = 0.7 * np.min(skims[skim][i,skims[skim][i,:]>0])
-    skimTravTime = skims['time']; skimDist = skims['dist']
-    skimDist_flat = skimDist.flatten()
-    del skims, skim, i
 
     zoneDict  = dict(np.transpose(np.vstack( (np.arange(1,nZones+1), zones['AREANR']) )))
     zoneDict  = {int(a):int(b) for a,b in zoneDict.items()}
@@ -58,14 +39,6 @@ def run_model(cfg):
 
     cepList   = np.unique(parcelNodes['CEP'])
     cepNodes = [np.where(parcelNodes['CEP']==str(cep))[0] for cep in cepList]
-    
-    # Keep only cepNodeDict and the last for loop
-    cepNodeDict = {}; cepZoneDict = {}; cepSkimDict = {}
-    for cep in cepList: 
-        cepZoneDict[cep] = parcelNodes[parcelNodes['CEP'] == cep]['AREANR'].astype(int).tolist()
-        cepSkimDict[cep] = parcelNodes[parcelNodes['CEP'] == cep]['SKIMNR'].astype(int).tolist()
-    for cepNo in range(len(cepList)):
-        cepNodeDict[cepList[cepNo]] = cepNodes[cepNo]
 
     parcels = pd.read_csv(cfg['PARCELS'])
     parcels.index = parcels['Parcel_ID']
@@ -106,7 +79,6 @@ def run_model(cfg):
             Geemente = Gemeenten [0]
         else:
             Geemente = Gemeenten
-        # Geemente = Gemeenten [0] if  type (Gemeenten[0]) == list else Gemeenten
         parcels_hyperconnected = parcels_hyperconnected[parcels_hyperconnected['D_zone'].isin(zones['AREANR'][zones['GEMEENTEN'].isin(Geemente)])] #filter the parcels to study area
         origin_distribution = segs['1: woningen']/segs['1: woningen'].sum() #create distribution to number of houses
         parcels_hyperconnected['O_zone'] = np.random.choice(segs['zone'], p=(origin_distribution), size=(len(parcels_hyperconnected))) #assign origin based on distribution  
@@ -125,4 +97,5 @@ def run_model(cfg):
     parcels_hubspoke['Fulfilment']='Hubspoke'
 
     Parcels = parcels_hubspoke.append(parcels_hyperconnected)
-    Parcels.to_csv(f"{cfg['OUTDIR']}Demand_parcels_fulfilment_{cfg['LABEL']}.csv", index=False)
+    Parcels.to_csv(join(cfg['OUTDIR'], "Demand_parcels_fulfilment.csv"), index=False)
+    logger.info("Connection Generation 2 Market done in %.2fs", time()-start_time)
