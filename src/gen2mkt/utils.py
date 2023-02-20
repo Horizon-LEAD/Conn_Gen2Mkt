@@ -9,6 +9,7 @@ import numpy as np
 import shapefile as shp
 import array
 import os.path
+from zipfile import ZipFile
 
 def get_traveltime(orig,dest,skim,nZones,timeFac):
     ''' Obtain the travel time [h] for orig to a destination zone. '''
@@ -33,12 +34,16 @@ def read_mtx(mtxfile):
 
 
 
-def read_shape(shapePath, encoding='latin1', returnGeometry=False):
+def read_shape(fpath, encoding='latin1', returnGeometry=False):
     '''
     Read the shapefile with zones (using pyshp --> import shapefile as shp)
     '''
+    with ZipFile(fpath) as z:
+        z.extractall(path=os.path.dirname(fpath))
+
+    shape_path = os.path.splitext(fpath)[0] + '.shp'
     # Load the shape
-    sf = shp.Reader(shapePath, encoding=encoding)
+    sf = shp.Reader(shape_path, encoding=encoding)
     records = sf.records()
     if returnGeometry:
         geometry = sf.__geo_interface__
