@@ -12,10 +12,10 @@ Furthermore, a `Dockerfile` is provided so that the user can package the parcel 
 docker build -t gen2mkt:latest .
 ```
 
-## Usage 
+## Usage
 
 ```
-gen2mkt -h                                                                                                                                  19.9s  2023-02-20 19:26:49
+$ gen2mkt -h
 usage: gen2mkt [-h] [-v] [--flog] [-e ENV] [--gui] PARCELS ZONES SEGS PARCELNODES OUTDIR
 
 gen2mkt connector
@@ -47,7 +47,7 @@ gen2mkt -vvv --env .env \
 ```
 
 ```
-docker run --rm \     
+docker run --rm \
   -v $PWD/sample-data/input:/data/input \
   -v $PWD/sample-data/output:/data/output \
   --env-file .env \
