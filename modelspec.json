@@ -1,12 +1,9 @@
 {
-    "name": "Parcel Generation To Market",
-    "description":"The Parcel Generation model generates [...].",
+    "name": "ParcelGeneration-2-ParcelMarket",
+    "description":"Connect the output of parcel generation to the input of parcel market",
     "version": "1.0.1",
     "status":"draft",
-    "types": [
-        {"name": "Network Model", "description":"Network models deal with routing and allocation to road networks."}
-    ],
-    "dockerImage":"registry.gitlab.com/inlecom/lead/models/gen2mkt:latest",
+    "dockerImage":"registry.gitlab.com/inlecom/lead/models/parcelgen-2-parcelmkt:latest",
     "url": "https://github.com/Horizon-LEAD/Conn_Gen2Mkt",
     "modelData":  [
         {
