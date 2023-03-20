@@ -1,5 +1,4 @@
-"""
-gen2mkt connector
+"""Main module - entrypoint
 """
 
 import logging
@@ -71,14 +70,14 @@ def main():
     """
 
     # command line argument parsing
-    parser = ArgumentParser(description=__doc__,
+    parser = ArgumentParser(description="Parcel Generation to Parcel Market connector.",
                             formatter_class=RawDefaultsHelpFormatter)
 
     parser.add_argument('PARCELS', type=strfile, help='The path of the parcel demand file (csv)')
     parser.add_argument('ZONES', type=strfile, help='The path of the area shape file (shp)')
     parser.add_argument('SEGS', type=strfile, help='The path of the socioeconomics data file (csv)')
-    parser.add_argument('PARCELNODES', type=strfile,
-                        help='The path of the parcel nodes file (shp)')
+    # parser.add_argument('PARCELNODES', type=strfile,
+    #                     help='The path of the parcel nodes file (shp)')
     parser.add_argument('OUTDIR', type=strdir, help='The output directory')
 
     parser.add_argument('-v', '--verbosity', action='count', default=0,
@@ -87,8 +86,6 @@ def main():
                         help='Stores logs to file')
     parser.add_argument('-e', '--env', type=str, default=None,
                         help='Defines the path of the environment file')
-    parser.add_argument('--gui', action='store_true', default=False,
-                        help='Displays the graphical user interface')
 
     args = parser.parse_args(argv[1:])
 
