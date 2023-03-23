@@ -1,14 +1,14 @@
 {
     "name": "ParcelGeneration-2-ParcelMarket",
     "description":"Connect the output of parcel generation to the input of parcel market",
-    "version": "1.0.1",
+    "version": "1.0.0",
     "status":"draft",
     "dockerImage":"registry.gitlab.com/inlecom/lead/models/parcelgen-2-parcelmkt:latest",
     "url": "https://github.com/Horizon-LEAD/Conn_Gen2Mkt",
     "modelData":  [
         {
             "name": "Parcel Demand",
-            "variableName": "parcel_demand",
+            "variableName": "PARCELS",
             "description": "Parcel list with Origin, Destination and Courier.",
             "isOutput": false,
             "isOutputDir": false,
@@ -33,7 +33,7 @@
         },
         {
             "name": "Area shape file",
-            "variableName": "area",
+            "variableName": "ZONES",
             "description": "Shapefile of the city. The areas delimited should be linked with the areas in the Socioeconomic Data file.",
             "isOutput": false,
             "isOutputDir": false,
@@ -58,7 +58,7 @@
         },
         {
             "name": "Socioeconomic Data",
-            "variableName": "sedata",
+            "variableName": "SEGS",
             "description": "CSV with socioeconomic data per area within the city. The mandatory fields are \"zone\"; \"1: woningen\"; \"9: arbeidspl_totaal\"",
             "isOutput": false,
             "isOutputDir": false,
@@ -70,6 +70,31 @@
                 "description": "",
                 "dataType": "file",
                 "extension": "csv",
+                "validators": [
+                    {
+                        "name": "required",
+                        "description": "required",
+                        "validatorType": "required",
+                        "value": ""
+                    }
+                ],
+                "objectKeys": []
+            }
+        },
+        {
+            "name": "output-directory",
+            "variableName": "OUTDIR",
+            "description": "Output directory",
+            "isOutput": false,
+            "isOutputDir": true,
+            "isOptional": false,
+            "inputType": "CLI",
+            "chartType": "NONE",
+            "modelDataType": {
+                "name": "string",
+                "description": "",
+                "dataType": "string",
+                "extension": null,
                 "validators": [
                     {
                         "name": "required",
@@ -250,32 +275,7 @@
             }
         },
         {
-            "name": "output-directory",
-            "variableName": "OUTDIR",
-            "description": "Output directory",
-            "isOutput": false,
-            "isOutputDir": true,
-            "isOptional": false,
-            "inputType": "CLI",
-            "chartType": "NONE",
-            "modelDataType": {
-                "name": "string",
-                "description": "",
-                "dataType": "string",
-                "extension": null,
-                "validators": [
-                    {
-                        "name": "required",
-                        "description": "required",
-                        "validatorType": "required",
-                        "value": ""
-                    }
-                ],
-                "objectKeys": []
-            }
-        },
-        {
-            "name": "Parcel Fulfillment",
+            "name": "Demand Parcels Fulfillment",
             "variableName": "Demand_parcels_fulfillment",
             "description": "Parcel Fulfillment.",
             "isOutput": true,
@@ -296,12 +296,6 @@
                 ],
                 "objectKeys": []
             },
-            "fromRow": null,
-            "toRow": null,
-            "column": null,
-            "refModelData": null,
-            "jsonPath": null,
-            "sheet": null,
             "delimiter": ",",
             "qualifier": "\"",
             "dateFormat": null
