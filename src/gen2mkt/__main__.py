@@ -112,7 +112,7 @@ def main():
 
     # setting of the configuration
     config = vars(args).copy()
-    _ = [config.pop(key) for key in ("verbosity", "flog", "env", "gui")]
+    _ = [config.pop(key) for key in ("verbosity", "flog", "env")]
     config_env = {}
     if args.env:
         if isfile(abspath(args.env)):
