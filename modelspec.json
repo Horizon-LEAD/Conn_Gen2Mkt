@@ -32,7 +32,7 @@
             }
         },
         {
-            "name": "Area shape file",
+            "name": "Zones shape file",
             "variableName": "ZONES",
             "description": "Shapefile of the city. The areas delimited should be linked with the areas in the Socioeconomic Data file.",
             "isOutput": false,
@@ -276,7 +276,7 @@
         },
         {
             "name": "Demand Parcels Fulfillment",
-            "variableName": "Demand_parcels_fulfillment",
+            "variableName": "Demand_parcels_fulfilment",
             "description": "Parcel Fulfillment.",
             "isOutput": true,
             "isOptional": false,
